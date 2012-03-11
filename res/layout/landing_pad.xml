@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/app_background"
+    android:orientation="vertical"
+    android:weightSum="10" >
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="9"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/btsearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/search_icon" >
+        </ImageButton>
+
+        <ImageButton
+            android:id="@+id/btshare"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/share_icon" />
+
+        <ImageButton
+            android:id="@+id/btshuffle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:background="@null"
+            android:padding="10dp"
+            android:src="@drawable/playlist_icon" />
+
+        <ImageButton
+            android:id="@+id/btList"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:background="@null"
+            android:src="@drawable/dashboard_icon" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_weight="1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="10"
+        >
+
+        <TableLayout
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_weight="2" >
+
+            <TableRow
+                android:layout_weight="1"
+                android:weightSum="10" >
+
+                <ImageButton
+                    android:id="@+id/btArtists"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="5"
+                    android:background="@null"
+                    android:src="@drawable/artist_icon" />
+
+                <ImageButton
+                    android:id="@+id/btSongs"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="5"
+                    android:background="@null"
+                    android:src="@drawable/songs_icon" />
+            </TableRow>
+
+            <TableRow
+                android:layout_weight="1"
+                android:weightSum="10" >
+
+                <ImageButton
+                    android:id="@+id/btAlbums"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="5"
+                    android:background="@null"
+                    android:src="@drawable/albums_icon" />
+
+                <ImageButton
+                    android:id="@+id/btgenres"
+                    android:layout_width="fill_parent"
+                    android:layout_height="fill_parent"
+                    android:layout_weight="5"
+                    android:background="@null"
+                    android:src="@drawable/genre_icon" />
+            </TableRow>
+        </TableLayout>
+
+        <LinearLayout
+            android:id="@+id/adLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="8" >
+
+             <com.google.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                ads:adSize="BANNER"
+               	ads:testDevices="F60EA49895175ADF3D87544280436254"
+                ads:adUnitId="a14f431f1900674"
+                ads:loadAdOnCreate="true"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>
