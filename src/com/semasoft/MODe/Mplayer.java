@@ -37,9 +37,8 @@ public class Mplayer extends Service {
 	public void onStart(Intent paramIntent, int paramInt) {
 		super.onStart(paramIntent, paramInt);
 		Toast.makeText(getApplicationContext(), "Getting the Best", 1).show();
-		url = ((String) paramIntent.getExtras().getString("url"));	
 		
-		
+		url = ((String) paramIntent.getExtras().getString("url"));
 		
 		play p = new play();
 		p.execute();
@@ -88,11 +87,7 @@ public class Mplayer extends Service {
 					player.getDuration();
 					player.start();
 					Log.v("duration", player.getDuration()+" ");
-					for(int i=0; i<player.getDuration(); player.getCurrentPosition())
-					{
-						//Log.v("position", "pos"+player.getCurrentPosition());
-					}
-
+					
 					
 					Log.v("service", "playing");
 					

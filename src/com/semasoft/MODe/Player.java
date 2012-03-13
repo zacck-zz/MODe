@@ -37,7 +37,7 @@ public class Player extends Activity {
 		Log.v("server", url);
 		
 		//check if the service is running 
-		if(!isMyServiceRunning()){
+		if(isMyServiceRunning()){
 			AlertDialog.Builder mBuilder = new Builder(Player.this);
 			mBuilder.setCancelable(false);
 			mBuilder.setTitle("Action");
@@ -60,6 +60,7 @@ public class Player extends Activity {
 			});
 			
 			AlertDialog mPlayDialog = mBuilder.create();
+			mPlayDialog.show();
 			
 		}
 		else
@@ -93,11 +94,14 @@ public class Player extends Activity {
 			Intent shareIntent = new Intent(android.content.Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Mode Music Player");
-			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Entertainment on Demand");
+			shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Music on demand by mode");
 
 			startActivity(Intent.createChooser(shareIntent, "Listening to Music on MODe"));
 
 		break;
+		case R.id.rateMusic:
+			startActivity(new Intent(Player.this, Rating_Bar.class));
+			break;
 
 		
 		}

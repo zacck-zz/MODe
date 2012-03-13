@@ -1,5 +1,7 @@
 package com.semasoft.MODe;
 
+import impl.android.com.twitterapime.xauth.ui.WebViewOAuthDialogWrapper;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 
@@ -7,23 +9,40 @@ import com.facebook.android.DialogError;
 import com.facebook.android.Facebook;
 import com.facebook.android.Facebook.DialogListener;
 import com.facebook.android.FacebookError;
+import com.twitterapime.rest.Credential;
+import com.twitterapime.rest.TweetER;
+import com.twitterapime.rest.UserAccountManager;
+import com.twitterapime.search.Tweet;
+import com.twitterapime.xauth.Token;
+import com.twitterapime.xauth.ui.OAuthDialogListener;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
+import android.webkit.WebView;
 import android.widget.Button;
 import android.widget.Toast;
 
-public class Shar extends Activity implements OnClickListener {
+public class Shar extends Activity implements OnClickListener, OAuthDialogListener {
 	Facebook mfacebook = new Facebook("372314599459769");
 	Button fb,Tw;
 	String FILENAME = "AndroidSSO_data";
     private SharedPreferences mPrefs;
     String access_token;
+    String CONSUMER_KEY;
+	
+	
+	  String CONSUMER_SECRET;
+
+	
+	  String CALLBACK_URL;
 	
 	
 	
@@ -34,6 +53,8 @@ public class Shar extends Activity implements OnClickListener {
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
 		setContentView(R.layout.social_media);
 		fb = (Button)findViewById(R.id.socfb);
+		Tw = (Button)findViewById(R.id.soctw);
+		Tw.setOnClickListener(this);
 		fb.setOnClickListener(this);
 		mPrefs = getPreferences(MODE_PRIVATE);
 		access_token = mPrefs.getString("access_token", null);
@@ -86,8 +107,12 @@ public class Shar extends Activity implements OnClickListener {
 				
 				@Override
 				public void onComplete(Bundle values) {
-					// TODO Auto-generated method stub
-					
+					SharedPreferences.Editor editor = mPrefs.edit();
+					editor.putString("access_token",
+							mfacebook.getAccessToken());
+					editor.putLong("access_expires",
+							mfacebook.getAccessExpires());
+					editor.commit();					
 				}
 				
 				@Override
@@ -106,16 +131,45 @@ public class Shar extends Activity implements OnClickListener {
 				upDets.putString(Facebook.TOKEN, access_token);
 				response = mfacebook.request("me/feed", upDets, "POST");
 				Toast.makeText(Shar.this, "posted to timeline", Toast.LENGTH_LONG).show();
-			} catch (MalformedURLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			} catch (Exception e) {
+				
+				Log.v("fail" ,e.toString());
+				
+				
+			} 
 			
 			
 			break;
+			
+		case R.id.soctw:
+			
+		 	CONSUMER_KEY = "gwmR0pP27BsuojnyuCNXg";
+			
+			
+			CONSUMER_SECRET = "2pnEQA5hL3WrsLhvFSuy7p4q4R0GEBNtfChBWnQhc";
+
+			
+			CALLBACK_URL = "http://semasoftltd.com";
+			  
+			  //do the actual login to twitter
+			  
+			  //
+		        WebView webView = new WebView(Shar.this);
+		        setContentView(webView);
+		        webView.requestFocus(View.FOCUS_DOWN);
+		        //
+		        WebViewOAuthDialogWrapper pageWrapper =
+		        	new WebViewOAuthDialogWrapper(webView);
+		        //
+				pageWrapper.setConsumerKey(CONSUMER_KEY);
+				pageWrapper.setConsumerSecret(CONSUMER_SECRET);
+				pageWrapper.setCallbackUrl(CALLBACK_URL);
+				pageWrapper.setOAuthListener(this);
+				//
+				pageWrapper.login();
+			  
+			break;
+			
 		}
 		
 	}
@@ -124,6 +178,47 @@ public class Shar extends Activity implements OnClickListener {
 	protected void onResume() {
 		 super.onResume();
 	     mfacebook.extendAccessTokenIfNeeded(Shar.this, null);
+	}
+
+	@Override
+	public void onAccessDenied(String message) {
+		showMessage(message);
+	}
+
+	@Override
+	public void onAuthorize(Token accessToken) {
+		
+		Credential c = new Credential(CONSUMER_KEY, CONSUMER_SECRET, accessToken);
+		UserAccountManager uam = UserAccountManager.getInstance(c);
+		//
+		try {
+			if (uam.verifyCredential()) {
+				TweetER.getInstance(uam).post(new Tweet("Music on Demand check out soon " + System.currentTimeMillis()));
+				//
+				showMessage("tweet posted");
+			}
+		} catch (Exception e) {
+			showMessage(e.toString());
+		}
+		
+	}
+
+	@Override
+	public void onFail(String error, String message) {
+		showMessage(message + " "+error);
+		
+	}
+	
+	private void showMessage(String msg) {
+		AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		builder.setMessage(msg).setCancelable(false)
+				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						dialog.cancel();
+					}
+				});
+		//
+		builder.create().show();
 	}
 
 }
