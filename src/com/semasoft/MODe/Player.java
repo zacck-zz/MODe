@@ -129,18 +129,7 @@ public class Player extends Activity {
 		
 	}
 	
-	class getArtistandSongName extends AsyncTask<Void, Void, Void>
-	{
-
-		@Override
-		protected Void doInBackground(Void... params) {
-			
-			
-			
-			return null;
-		}
-		
-	}
+	
 	
 	private boolean isMyServiceRunning() {
 		ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
