@@ -205,7 +205,7 @@ public class Shar extends Activity implements OnClickListener, OAuthDialogListen
 
 	@Override
 	public void onFail(String error, String message) {
-		showMessage(message + " "+error);
+		Log.v("twitter", error+message);
 		
 	}
 	
