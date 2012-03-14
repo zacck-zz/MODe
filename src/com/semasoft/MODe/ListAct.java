@@ -251,7 +251,7 @@ public class ListAct extends ListActivity {
 
 		ArrayList<HashMap<String, String>> listy = new ArrayList<HashMap<String, String>>();
 
-		String[] artist_names, song_names, song_ids, album_names;
+		String[] artist_names, song_names, song_ids, album_names,song_links;
 
 		@Override
 		protected Void doInBackground(Void... params) {
@@ -268,6 +268,7 @@ public class ListAct extends ListActivity {
 				song_names = new String[parent.length()];
 				song_ids = new String[parent.length()];
 				album_names = new String[parent.length()];
+				song_links = new String[parent.length()];
 				JSONObject child;
 
 				for (int i = 0; i < parent.length(); i++)
@@ -278,7 +279,7 @@ public class ListAct extends ListActivity {
 					song_names[i] = child.getString("song_name");
 					song_ids[i] = child.getString("song_id");
 					album_names[i] = child.getString("song_album");
-
+					song_links[i] = child.getString("songs_link");
 				}
 
 				// load the hashmaps
@@ -313,6 +314,21 @@ public class ListAct extends ListActivity {
 
 			ListView lv = getListView();
 			lv.setTextFilterEnabled(true);
+			lv.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int pos, long arg3) {
+						Intent p = new Intent(ListAct.this, Player.class);
+						p.putExtra("aname", song_names[pos]);
+						p.putExtra("sname", song_names[pos]);
+						p.putExtra("url", song_links[pos]);
+						startActivity(p);
+						
+					
+				}
+				
+			});
 
 		}
 
