@@ -91,6 +91,7 @@ public class Player extends Activity {
 		
 		
 		
+		
 	}
 	
 	@Override
@@ -120,7 +121,19 @@ public class Player extends Activity {
 
 		break;
 		case R.id.rateMusic:
-			startActivity(new Intent(Player.this, Rating_Bar.class));
+			Intent intentRate = new Intent(Player.this, Rating_Bar.class);
+			if (aName.equals(null) || sName.equals(null))
+			{
+				
+			} 
+			else
+			{
+				intentRate.putExtra("aname", aName);
+				intentRate.putExtra("sname", sName);
+			}
+			
+			startActivity(intentRate);
+			
 			break;
 
 		

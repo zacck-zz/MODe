@@ -8,13 +8,18 @@ import android.widget.TextView;
 public class Rating_Bar extends Activity implements RatingBar.OnRatingBarChangeListener{
 
 	RatingBar rating; // declare RatingBar object
-	TextView ratingText;// declare TextView Object
+	TextView ratingText, songDets;// declare TextView Object
 
 	@Override
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState); // call super class constructor
-
+		super.onCreate(savedInstanceState); // call super class constructor		
 		setContentView(R.layout.rating);// set content from main.xml
+		String sdets = getIntent().getExtras().getString("aname")+"-"+getIntent().getExtras().getString("sname");
+
+		songDets = (TextView)findViewById(R.id.RsongDets);
+		songDets.setText(sdets);
+		
+		
 		ratingText=(TextView)findViewById(R.id.ratingText);// create TextView object
 		rating=(RatingBar)findViewById(R.id.ratingBar);// create RatingBar object
 		rating.setOnRatingBarChangeListener(this);// select listener to be HelloAndroid (this) class
