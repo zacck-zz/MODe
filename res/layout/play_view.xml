@@ -92,7 +92,7 @@
                 android:src="@drawable/dashboard_icon" />
 
             <TextView
-                android:id="@+id/tvArtist"
+                android:id="@+id/tvPArtist"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -103,7 +103,7 @@
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/tvSong"
+                android:id="@+id/tvPSong"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"

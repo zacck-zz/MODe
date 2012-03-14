@@ -17,21 +17,41 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class Player extends Activity {
 	
-	String url;
+	String url,aName,sName;
 	Intent in;
+	TextView tvA, tvS;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.play_view);
+		tvA = (TextView)findViewById(R.id.tvPArtist);
+		tvS = (TextView)findViewById(R.id.tvPSong);
+		aName = getIntent().getExtras().getString("aname");
+		sName = getIntent().getExtras().getString("sname");
+		
+		if (aName.equals(null) || sName.equals(null))
+		{
+			Toast.makeText(Player.this, "hasnt been set", Toast.LENGTH_LONG).show();
+		}
+		else
+		{
+			tvA.setText(aName);
+			tvS.setText(sName);
+		}
+		
+		
 		
 		AdView mAd = (AdView)findViewById(R.id.ad);
 		mAd.loadAd(new AdRequest());
+		
+		
 		
 		url = getIntent().getExtras().getString("url");
 		Log.v("server", url);
@@ -87,7 +107,7 @@ public class Player extends Activity {
 		switch (item.getItemId()) {
 		case R.id.stopPlaying:
 			Intent n = new Intent(Player.this, Mplayer.class);
-			Toast.makeText(Player.this, "pressed me ", Toast.LENGTH_LONG).show();
+			Toast.makeText(Player.this, "You have stopped streaming", Toast.LENGTH_LONG).show();
 			stopService(n);
 			break;
 		case R.id.invite:

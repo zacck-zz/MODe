@@ -23,6 +23,7 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.test.PerformanceTestCase;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
@@ -115,7 +116,8 @@ public class SearchList extends ListActivity {
 			setListAdapter(adp);
 
 			ListView lv = getListView();
-			lv.setTextFilterEnabled(true);
+			lv.setTextFilterEnabled(true); 
+			
 
 			lv.setOnItemClickListener(new OnItemClickListener() {
 
@@ -127,6 +129,8 @@ public class SearchList extends ListActivity {
 					
 					Intent in = new Intent(SearchList.this, Player.class);
 					in.putExtra("url", song_links[pos]);
+					in.putExtra("sname", song_name[pos]);
+					in.putExtra("aname", artist_name[pos]);
 					startActivity(in);
 				}
 			});
