@@ -105,41 +105,35 @@ public class ArtistSongs extends ListActivity {
 							R.id.tvSongName, R.id.tvAlbum, R.id.tvArtist});
 			setListAdapter(adp);
 
-//			ListView lv = getListView();
-//			lv.setTextFilterEnabled(true);
-//
-//			lv.setOnItemClickListener(new OnItemClickListener() {
-//
-//				@Override
-//				public void onItemClick(AdapterView<?> arg0, View arg1,
-//						int pos, long arg3) {
-//					
-//					
-//					 
-//					
-//					
-//
-//					//starterservi s = new starterservi();
-//					//s.execute();
-//				}
-//			});
+			ListView lv = getListView();
+			lv.setTextFilterEnabled(true);
+
+			lv.setOnItemClickListener(new OnItemClickListener() {
+
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1,
+						int pos, long arg3) {
+					
+					Intent n =  new Intent(ArtistSongs.this, Player.class);
+					
+					if (song_links!=null) {
+						n.putExtra("url", song_links[pos]);
+						n.putExtra("aname", artist_name[pos]);
+						n.putExtra("sname", song_name[pos]);
+						startActivity(n);
+					}
+					 
+					
+					
+
+					
+				}
+			});
 		}
 
 	}
 	
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		// TODO Auto-generated method stub
-		
-		Intent n =  new Intent(ArtistSongs.this, Player.class);
-		
-		if (song_links!=null) {
-			n.putExtra("url", song_links[position]);
-			startActivity(n);
-		}
-		
-		
-	}
+	
 
 	
 	
