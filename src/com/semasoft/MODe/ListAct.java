@@ -320,7 +320,7 @@ public class ListAct extends ListActivity {
 				public void onItemClick(AdapterView<?> arg0, View arg1,
 						int pos, long arg3) {
 						Intent p = new Intent(ListAct.this, Player.class);
-						p.putExtra("aname", song_names[pos]);
+						p.putExtra("aname", artist_names[pos]);
 						p.putExtra("sname", song_names[pos]);
 						p.putExtra("url", song_links[pos]);
 						startActivity(p);
