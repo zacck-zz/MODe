@@ -54,6 +54,7 @@
             
             android:theme="@android:style/Theme.Dialog" >
         </activity>
+        <activity android:name=".SongsList"></activity>
         <activity
             android:name=".Rating_Bar"
             
