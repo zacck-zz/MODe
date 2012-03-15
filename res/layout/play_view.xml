@@ -89,7 +89,7 @@
                 android:layout_height="200dip"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@drawable/dashboard_icon" />
+                android:src="@drawable/inside_level_logo" />
 
             <TextView
                 android:id="@+id/tvPArtist"

@@ -42,8 +42,8 @@ public class Player extends Activity {
 		}
 		else
 		{
-			tvA.setText(aName);
-			tvS.setText(sName);
+			tvA.setText("Artist - "+aName);
+			tvS.setText("Song Name - "+sName);
 		}
 		
 		
