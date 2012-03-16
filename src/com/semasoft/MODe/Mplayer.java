@@ -3,18 +3,25 @@ package com.semasoft.MODe;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.AudioManager.OnAudioFocusChangeListener;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnPreparedListener;
+import android.net.wifi.WifiManager;
+import android.net.wifi.WifiManager.WifiLock;
 import android.os.AsyncTask;
+import android.os.PowerManager;
 
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class Mplayer extends Service {
+public class Mplayer extends Service implements OnAudioFocusChangeListener {
 	static boolean isPlaying = false;
 	public MediaPlayer mp;
 	String url = null;
+	WifiLock wLock;
+	play p;
 
 	public IBinder onBind(Intent paramIntent) {
 		return null;
@@ -31,6 +38,7 @@ public class Mplayer extends Service {
 		
 		mp.stop();
 		mp.release();
+		wLock.release();
 		isPlaying = false;
 	}
 
@@ -40,7 +48,7 @@ public class Mplayer extends Service {
 		
 		url = ((String) paramIntent.getExtras().getString("url"));
 		
-		play p = new play();
+		p = new play();
 		p.execute();
 		
 		
@@ -57,6 +65,9 @@ public class Mplayer extends Service {
 			Log.v("service", "starting jobo");
 			mp = new MediaPlayer();
 			mp.setAudioStreamType(3);
+			mp.setWakeMode(getApplicationContext(), PowerManager.PARTIAL_WAKE_LOCK);
+			wLock = ((WifiManager) getSystemService(getApplicationContext().WIFI_SERVICE)).createWifiLock(WifiManager.WIFI_MODE_FULL,"MODeWifiLock");
+			wLock.acquire();
 			
 			
 		}
@@ -85,7 +96,13 @@ public class Mplayer extends Service {
 					
 					Log.v("service","going in ");
 					player.getDuration();
+					if(audioChecker())
+					{
 					player.start();
+					}
+					else{
+						Log.v("service", "playing isnt possible audio is playing");
+					}
 					Log.v("duration", player.getDuration()+" ");
 					
 					
@@ -114,6 +131,59 @@ public class Mplayer extends Service {
 		
 		
 	}
+	
+	public boolean audioChecker()
+	{
+		AudioManager am = (AudioManager)getSystemService(getApplicationContext().AUDIO_SERVICE);
+		int res = am.requestAudioFocus(this, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
+		if (res != AudioManager.AUDIOFOCUS_REQUEST_GRANTED)
+		{
+			return false;
+		}
+		else{
+			return true;	
+		}
+		
+		
+	}
+
+	@Override
+	public void onAudioFocusChange(int focus) {
+		switch(focus)
+		{
+		case AudioManager.AUDIOFOCUS_GAIN:
+            // resume playback
+            if (mp == null) p.execute();
+            else if (!mp.isPlaying()) mp.start();
+            mp.setVolume(1.0f, 1.0f);
+            break;
+
+        case AudioManager.AUDIOFOCUS_LOSS:
+            // Lost focus for an unbounded amount of time: stop playback and release media player
+            if (mp.isPlaying()) mp.stop();
+            mp.release();
+            mp = null;
+            break;
+
+        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
+            // Lost focus for a short time, but we have to stop
+            // playback. We don't release the media player because playback
+            // is likely to resume
+            if (mp.isPlaying())mp.pause();
+            break;
+
+        case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK:
+            // Lost focus for a short time, but it's ok to keep playing
+            // at an attenuated level
+            if (mp.isPlaying()) mp.setVolume(0.1f, 0.1f);
+            break;
+		}
+		
+		
+		
+	}
+
+	
 	
 		
 	
