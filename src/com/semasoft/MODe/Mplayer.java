@@ -1,6 +1,8 @@
 package com.semasoft.MODe;
 
 
+import android.app.Notification;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.media.AudioManager;
@@ -22,6 +24,7 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 	String url = null;
 	WifiLock wLock;
 	play p;
+	static final int NOTIFICATION_ID = 1;
 
 	public IBinder onBind(Intent paramIntent) {
 		return null;
@@ -39,6 +42,7 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 		mp.stop();
 		mp.release();
 		wLock.release();
+		stopForeground(true);
 		isPlaying = false;
 	}
 
@@ -99,8 +103,19 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
 					if(audioChecker())
 					{
 					player.start();
+					PendingIntent pi = PendingIntent.getActivity(getApplicationContext(), 0,
+			                new Intent(getApplicationContext(), Player.class),
+			                PendingIntent.FLAG_UPDATE_CURRENT);
+					Notification notification = new Notification();
+					notification.tickerText = url +" is playing";
+					notification.icon = R.drawable.dashboard_icon;
+					notification.flags |= Notification.FLAG_ONGOING_EVENT;
+					notification.setLatestEventInfo(getApplicationContext(), "MusicPlayerSample",
+					                "Playing: " + url, pi);
+					startForeground(NOTIFICATION_ID, notification);
 					}
-					else{
+					else
+					{
 						Log.v("service", "playing isnt possible audio is playing");
 					}
 					Log.v("duration", player.getDuration()+" ");
@@ -161,8 +176,11 @@ public class Mplayer extends Service implements OnAudioFocusChangeListener {
         case AudioManager.AUDIOFOCUS_LOSS:
             // Lost focus for an unbounded amount of time: stop playback and release media player
             if (mp.isPlaying()) mp.stop();
+            
             mp.release();
+            
             mp = null;
+            stopForeground(true);
             break;
 
         case AudioManager.AUDIOFOCUS_LOSS_TRANSIENT:
